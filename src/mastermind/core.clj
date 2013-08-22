@@ -13,5 +13,5 @@
 ;; Launching
 (defn -main 
   []
-  (println "Hello Mastermind !")
+  (println "------------------\nHello Mastermind !\n------------------")
   (launch-game))

@@ -21,6 +21,7 @@
 (declare exiting?)
 (declare winning?)
 (declare printable-guess)
+(declare printable-help)
 (declare wrong-input)
 (declare game-won)
 (declare end-of-game)
@@ -33,16 +34,15 @@
 (defn launch-game
   "Game Launcher"
   []
-  (let [game-settings {:secret (create-secret)}]
-    (println "Starting Game...")
-    (println (game-settings :secret))
-    (println (str "Secret : [" (clojure.string/join (repeat *nb-positions* "X")) "]"))
+  (let [secret (create-secret)]
+    (println (printable-help))
+    (println "Code")
     (print "              ")
-    (main-loop game-settings)))
+    (main-loop secret)))
 
 (defn main-loop
   "Main Game Loop"
-  [game-settings]
+  [secret]
   (do
     (print " Your Guess : ")
     (flush)
@@ -50,7 +50,7 @@
       (if (exiting? input)
         (end-of-game)
         ((let [guess (parse-proposition input)
-               score (check-guess guess (game-settings :secret))]
+               score (check-guess guess secret)]
           (if (check-proposition guess)
               (do
                 (print (printable-guess guess) score)
@@ -58,7 +58,7 @@
                 (when (winning? score)
                       (game-won)))
               (wrong-input)))
-        (main-loop game-settings))))))
+        (main-loop secret))))))
 
 (defn exiting?
   "Check whether the user want to quit."
@@ -75,10 +75,19 @@
   [guess]
   (apply str (map #(background-color "  " (keyword %)) guess)))
 
+(defn printable-help
+  "Returns the help string"
+  []
+  (str "\nPossible colors : " 
+       (clojure.string/join ", " (map #(color % (keyword %)) *colors*))
+       "\n\nHelp : \n"
+       "Submit your guess : \"byrg\" or \"blue, red, yellow, purple\"\n"
+       "To quit : type \"exit\" or \"quit\"\n\n"))
+
 (defn wrong-input
   "When user delivers a wrongly written input"
   []
-  (print "Wrong Input."))
+  (print "Wrong Input.  "))
 
 (defn game-won
   "Winning the game hook"
