@@ -13,8 +13,8 @@
   (:use mastermind.colors))
 
 ;; Dynamic Configuration values
-(def ^:dynamic *colors* '("red" "green" "blue" "yellow" "purple"))
-(def ^:dynamic *nb-positions* 4)
+(def ^:dynamic *colors* '("red" "green" "blue" "yellow" "purple" "cyan"))
+(def ^:dynamic *nb-positions* 5)
 
 ;; Declarations
 (declare main-loop)
@@ -37,14 +37,14 @@
   (let [secret (create-secret)]
     (println (printable-help))
     (println "Code")
-    (print "              ")
-    (main-loop secret)))
+    (print "                ")
+    (main-loop secret 1)))
 
 (defn main-loop
   "Main Game Loop"
-  [secret]
+  [secret nb-tries]
   (do
-    (print " Your Guess : ")
+    (print "  Your Guess : ")
     (flush)
     (let [input (read-line)]
       (if (exiting? input)
@@ -56,9 +56,9 @@
                 (print (printable-guess guess) score)
                 (flush)
                 (when (winning? score)
-                      (game-won)))
+                      (game-won nb-tries)))
               (wrong-input)))
-        (main-loop secret))))))
+        (main-loop secret (inc nb-tries)))))))
 
 (defn exiting?
   "Check whether the user want to quit."
@@ -82,24 +82,24 @@
        (clojure.string/join ", " (map #(color % (keyword %)) *colors*))
        "\nCode length : " *nb-positions*
        "\n\nHelp : \n"
-       "Submit your guess : \"byrg\" or \"blue, red, yellow, purple\"\n"
+       "Submit your guess : \"byrgp\" or \"blue, red, yellow, purple, cyan\"\n"
        "To quit : type \"exit\" or \"quit\"\n\n"))
 
 (defn wrong-input
   "When user delivers a wrongly written input"
   []
-  (print "Wrong Input.  "))
+  (print "Wrong Input.    "))
 
 (defn game-won
   "Winning the game hook"
-  []
-  (println "You Won!")
+  [nb-tries]
+  (println "  You Won! (Number of tries :" nb-tries ")")
   (end-of-game))
 
 (defn end-of-game
   "Final game hook"
   []
-  (println "Bye.")
+  (println "\nBye.\n")
   (System/exit 0))
 
 
@@ -113,7 +113,7 @@
   "Parse the proposition made by user"
   [proposition]
   (if (nil? (some #(= \, %) (vec proposition)))
-    (let [color-map (zipmap '(\r \g \b \y \p) *colors*)]
+    (let [color-map (zipmap '(\r \g \b \y \p \c) *colors*)]
       (mapv #(color-map %) (vec proposition)))
     (mapv #(clojure.string/trim %) (clojure.string/split proposition #","))))
 
