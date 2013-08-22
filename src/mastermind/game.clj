@@ -9,7 +9,8 @@
 (ns mastermind.game
   (:require clojure.string)
   (:require clojure.set)
-  (:use mastermind.checker))
+  (:use mastermind.checker)
+  (:use mastermind.colors))
 
 ;; Constants
 (def colors '("red" "green" "blue" "yellow" "orange"))
@@ -18,6 +19,7 @@
 (declare main-loop)
 (declare exiting?)
 (declare winning?)
+(declare printable-guess)
 (declare wrong-input)
 (declare game-won)
 (declare end-of-game)
@@ -32,21 +34,25 @@
   []
   (let [game-settings {:secret (create-secret)
                        :nb-positions 4
-                       :nb-colors 5}]
-   (println "Starting Game...")
-   (main-loop game-settings)))
+                       :nb-colors 5}]                   
+    (println "Starting Game...")
+    (println (str "Secret : [" (clojure.string/join (repeat (game-settings :nb-positions) "X")) "]"))
+    (main-loop game-settings)))
 
 (defn main-loop
   "Main Game Loop"
   [game-settings]
-  (let [input (read-line)]
-    (if (exiting? input)
-      (end-of-game)
-      ((let [guess (parse-proposition input)]
-        (if (check-proposition guess (game-settings :nb-positions))
-            (println (check-guess guess (game-settings :secret)))
-            (wrong-input)))
-      (main-loop game-settings)))))
+  (do
+    (print "Your Guess : ")
+    (flush)
+    (let [input (read-line)]
+      (if (exiting? input)
+        (end-of-game)
+        ((let [guess (parse-proposition input)]
+          (if (check-proposition guess (game-settings :nb-positions))
+              (println (printable-guess guess) (check-guess guess (game-settings :secret)))
+              (wrong-input)))
+        (main-loop game-settings))))))
 
 (defn exiting?
   "Check whether the user want to quit."
@@ -58,10 +64,15 @@
   [score]
   (= [4 0] score))
 
+(defn printable-guess
+  "Print the user's guess with fancy colors"
+  [guess]
+  (apply str (map #(background-color "  " (keyword %)) guess)))
+
 (defn wrong-input
   "When user delivers a wrongly written input"
   []
-  (println "Wrong Input. Please retry."))
+  (print "Wrong Input."))
 
 (defn game-won
   "Winning the game hook"
