@@ -34,7 +34,7 @@
   []
   (let [game-settings {:secret (create-secret)
                        :nb-positions 4
-                       :nb-colors 5}]                   
+                       :nb-colors 5}]
     (println "Starting Game...")
     (println (str "Secret : [" (clojure.string/join (repeat (game-settings :nb-positions) "X")) "]"))
     (main-loop game-settings)))
@@ -48,9 +48,13 @@
     (let [input (read-line)]
       (if (exiting? input)
         (end-of-game)
-        ((let [guess (parse-proposition input)]
+        ((let [guess (parse-proposition input)
+               score (check-guess guess (game-settings :secret))]
           (if (check-proposition guess (game-settings :nb-positions))
-              (println (printable-guess guess) (check-guess guess (game-settings :secret)))
+              (do
+                (println (printable-guess guess) score)
+                (when (winning? score)
+                      (game-won)))
               (wrong-input)))
         (main-loop game-settings))))))
 
