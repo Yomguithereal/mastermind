@@ -12,4 +12,5 @@
 
 (deftest parse-proposition-test
     (is (= basic-guess (parse-proposition "red,blue,orange")))
-    (is (= basic-guess (parse-proposition "red, blue, orange "))))
+    (is (= basic-guess (parse-proposition "red, blue, orange ")))
+    (is (= basic-guess (parse-proposition "rbo"))))

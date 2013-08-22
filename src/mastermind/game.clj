@@ -21,7 +21,9 @@
 (defn launch-game
     "Game Launcher"
     []
-    (let [game-settings {:secret (create-secret)}]
+    (let [game-settings {:secret (create-secret)
+                         :nb-positions 4
+                         :nb-colors 5}]
         (println "Starting Game...")
         (main-loop game-settings)))
 
@@ -61,4 +63,7 @@
 (defn parse-proposition
     "Parse the proposition made by user"
     [proposition]
-    (vec (map #(clojure.string/trim %) (clojure.string/split proposition #","))))
+    (if (nil? (some #(= \, %) (vec proposition)))
+        (let [colors {\r "red", \g "green", \b "blue", \y "yellow", \o "orange"}]
+            (mapv #(colors %) (vec proposition)))
+        (mapv #(clojure.string/trim %) (clojure.string/split proposition #","))))

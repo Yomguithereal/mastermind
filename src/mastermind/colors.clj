@@ -14,3 +14,8 @@
     "Return an ANSI colored string"
     [string color]
     (str "\033[3" (__colors color) "m" string "\033[0m"))
+
+(defn background-color
+    "Return an ANSI background colored string"
+    [string color]
+    (str "\033[4" (__colors color) "m" string "\033[0m"))
