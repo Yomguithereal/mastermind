@@ -7,11 +7,11 @@
 
 ;; Namespace
 (ns mastermind.core
-    (:use mastermind.game)
-    (:gen-class :main true))
+  (:use mastermind.game)
+  (:gen-class :main true))
 
 ;; Launching
 (defn -main 
-    []
-    (println "Hello Mastermind !")
-    (launch-game))
+  []
+  (println "Hello Mastermind !")
+  (launch-game))
