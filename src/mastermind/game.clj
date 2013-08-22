@@ -6,13 +6,18 @@
 ;;
 
 ;; Namespace
-(ns mastermind.game)
+(ns mastermind.game
+    (:require clojure.string))
 
+;; Declarations
 (declare main-loop)
 (declare exiting?)
-(declare create-secret)
 (declare end-of-game)
 
+(declare create-secret)
+(declare parse-proposition)
+
+;; Game Operations
 (defn launch-game
     "Game Launcher"
     []
@@ -33,12 +38,6 @@
     [input]
     (or (= input "exit") (= input "quit")))
 
-(defn create-secret
-    "Randomly generates the secret of the game"
-    []
-    (let [colors '("red" "green" "blue" "yellow" "orange")]
-        (map (fn [x] (rand-nth colors)) (range 0 4))))
-
 (defn game-won
     "Winning the game hook"
     []
@@ -50,3 +49,16 @@
     []
     (println "Bye.")
     (System/exit 0))
+
+
+;; Utilities
+(defn create-secret
+    "Randomly generates the secret of the game"
+    []
+    (let [colors '("red" "green" "blue" "yellow" "orange")]
+        (map (fn [x] (rand-nth colors)) (range 0 4))))
+
+(defn parse-proposition
+    "Parse the proposition made by user"
+    [proposition]
+    (vec (map #(clojure.string/trim %) (clojure.string/split proposition #","))))
