@@ -12,8 +12,9 @@
   (:use mastermind.checker)
   (:use mastermind.colors))
 
-;; Constants
-(def colors '("red" "green" "blue" "yellow" "orange"))
+;; Dynamic Configuration values
+(def ^:dynamic *colors* '("red" "green" "blue" "yellow" "purple"))
+(def ^:dynamic *nb-positions* 4)
 
 ;; Declarations
 (declare main-loop)
@@ -32,27 +33,28 @@
 (defn launch-game
   "Game Launcher"
   []
-  (let [game-settings {:secret (create-secret)
-                       :nb-positions 4
-                       :nb-colors 5}]
+  (let [game-settings {:secret (create-secret)}]
     (println "Starting Game...")
-    (println (str "Secret : [" (clojure.string/join (repeat (game-settings :nb-positions) "X")) "]"))
+    (println (game-settings :secret))
+    (println (str "Secret : [" (clojure.string/join (repeat *nb-positions* "X")) "]"))
+    (print "              ")
     (main-loop game-settings)))
 
 (defn main-loop
   "Main Game Loop"
   [game-settings]
   (do
-    (print "Your Guess : ")
+    (print " Your Guess : ")
     (flush)
     (let [input (read-line)]
       (if (exiting? input)
         (end-of-game)
         ((let [guess (parse-proposition input)
                score (check-guess guess (game-settings :secret))]
-          (if (check-proposition guess (game-settings :nb-positions))
+          (if (check-proposition guess)
               (do
-                (println (printable-guess guess) score)
+                (print (printable-guess guess) score)
+                (flush)
                 (when (winning? score)
                       (game-won)))
               (wrong-input)))
@@ -66,7 +68,7 @@
 (defn winning?
   "Has the player won the game?"
   [score]
-  (= [4 0] score))
+  (= [*nb-positions* 0] score))
 
 (defn printable-guess
   "Print the user's guess with fancy colors"
@@ -95,17 +97,17 @@
 (defn create-secret
   "Randomly generates the secret of the game"
   []
-  (map (fn [x] (rand-nth colors)) (range 0 4)))
+  (map (fn [x] (rand-nth *colors*)) (range 0 *nb-positions*)))
 
 (defn parse-proposition
   "Parse the proposition made by user"
   [proposition]
   (if (nil? (some #(= \, %) (vec proposition)))
-    (let [color-map (zipmap '(\r \g \b \y \o) colors)]
+    (let [color-map (zipmap '(\r \g \b \y \p) *colors*)]
       (mapv #(color-map %) (vec proposition)))
     (mapv #(clojure.string/trim %) (clojure.string/split proposition #","))))
 
 (defn check-proposition
   "Check whether the proposition made by user is correct or not"
-  [guess nb-positions]
-  (and (= (count guess) nb-positions) (= 0 (count (clojure.set/difference (set guess) (set colors))))))
+  [guess]
+  (and (= (count guess) *nb-positions*) (= 0 (count (clojure.set/difference (set guess) (set *colors*))))))

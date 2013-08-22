@@ -8,7 +8,7 @@
 ;; Namespace
 (ns mastermind.colors)
 
-(def __colors (zipmap [:black :red :green :yellow :blue :magenta :cyan :white] (range 0 8)))
+(def __colors (zipmap [:black :red :green :yellow :blue :purple :cyan :white] (range 0 8)))
 
 (defn color
     "Return an ANSI colored string"
