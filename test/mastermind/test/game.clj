@@ -10,6 +10,11 @@
   (is (= false (exiting? "test")))
   (is (= false (exiting? 4))))
 
+(deftest winning?-test
+  (is (= true (winning? [4 0])))
+  (is (= false (winning? [3 0])))
+  (is (= false (winning? [0 4]))))
+
 (deftest parse-proposition-test
   (is (= basic-guess (parse-proposition "red,blue,orange")))
   (is (= basic-guess (parse-proposition "red, blue, orange ")))

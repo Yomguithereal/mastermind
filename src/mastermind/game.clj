@@ -17,6 +17,7 @@
 ;; Declarations
 (declare main-loop)
 (declare exiting?)
+(declare winning?)
 (declare wrong-input)
 (declare game-won)
 (declare end-of-game)
@@ -30,8 +31,8 @@
   "Game Launcher"
   []
   (let [game-settings {:secret (create-secret)
-   :nb-positions 4
-   :nb-colors 5}]
+                       :nb-positions 4
+                       :nb-colors 5}]
    (println "Starting Game...")
    (main-loop game-settings)))
 
@@ -51,6 +52,11 @@
   "Check whether the user want to quit."
   [input]
   (or (= input "exit") (= input "quit")))
+
+(defn winning?
+  "Has the player won the game?"
+  [score]
+  (= [4 0] score))
 
 (defn wrong-input
   "When user delivers a wrongly written input"
