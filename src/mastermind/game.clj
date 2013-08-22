@@ -80,6 +80,7 @@
   []
   (str "\nPossible colors : " 
        (clojure.string/join ", " (map #(color % (keyword %)) *colors*))
+       "\nCode length : " *nb-positions*
        "\n\nHelp : \n"
        "Submit your guess : \"byrg\" or \"blue, red, yellow, purple\"\n"
        "To quit : type \"exit\" or \"quit\"\n\n"))
