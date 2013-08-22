@@ -2,7 +2,7 @@
     (:use [mastermind.game])
     (:use [clojure.test]))
 
-(def basic-guess ["red" "blue" "orange"])
+(def basic-guess ["red" "blue" "purple"])
 
 (deftest exiting?-test
     (is (= true (exiting? "quit")))
@@ -11,11 +11,11 @@
     (is (= false (exiting? 4))))
 
 (deftest parse-proposition-test
-    (is (= basic-guess (parse-proposition "red,blue,orange")))
-    (is (= basic-guess (parse-proposition "red, blue, orange ")))
-    (is (= basic-guess (parse-proposition "rbo"))))
+    (is (= basic-guess (parse-proposition "red,blue,purple")))
+    (is (= basic-guess (parse-proposition "red, blue, purple ")))
+    (is (= basic-guess (parse-proposition "rbp"))))
 
 (deftest check-proposition-test
-    (is (= true (check-proposition ["blue" "red" "orange" "yellow"] 4)))
-    (is (= false (check-proposition ["blue" "red" "orange"] 4)))
-    (is (= false (check-proposition ["inexistant-color" "red" "orange" "yellow"] 4))))
+    (is (= true (check-proposition ["blue" "red" "purple" "yellow" "cyan"])))
+    (is (= false (check-proposition ["blue" "red" "purple"])))
+    (is (= false (check-proposition ["inexistant-color" "red" "purple" "yellow"]))))
