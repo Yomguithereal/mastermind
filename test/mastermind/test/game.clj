@@ -14,3 +14,8 @@
     (is (= basic-guess (parse-proposition "red,blue,orange")))
     (is (= basic-guess (parse-proposition "red, blue, orange ")))
     (is (= basic-guess (parse-proposition "rbo"))))
+
+(deftest check-proposition-test
+    (is (= true (check-proposition ["blue" "red" "orange" "yellow"] 4)))
+    (is (= false (check-proposition ["blue" "red" "orange"] 4)))
+    (is (= false (check-proposition ["inexistant-color" "red" "orange" "yellow"] 4))))
