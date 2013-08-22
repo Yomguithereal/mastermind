@@ -1,7 +1,9 @@
 #Clojure Mastermind
 
 This program is a command line implementation of the mastermind game. If you do not know
-the rules of this game, you should really go and read this [page](<http://en.wikipedia.org/wiki/Mastermind_(board_game)>).
+the rules of this game, you should really go and read this [page][1].
+
+[1]: <http://en.wikipedia.org/wiki/Mastermind_(board_game)>
 
 #Installation
 
