@@ -6,4 +6,6 @@
 /.lein-failures
 /checkouts
 /.lein-deps-sum
+/.lein-repl-history
+/target
 TODO.md
