@@ -37,7 +37,8 @@
   (let [secret (create-secret)]
     (println (printable-help))
     (println "Code")
-    (print "                ")
+    (println "----")
+    (print "                     ")
     (main-loop secret 1)))
 
 (defn main-loop
@@ -73,12 +74,12 @@
 (defn printable-guess
   "Print the user's guess with fancy colors"
   [guess]
-  (apply str (map #(background-color "  " (keyword %)) guess)))
+  (str "\n" (apply str (map #(str (background-color "  " (keyword %)) " ") guess))))
 
 (defn printable-help
   "Returns the help string"
   []
-  (str "\nPossible colors : " 
+  (str "\nPossible colors : "
        (clojure.string/join ", " (map #(color % (keyword %)) *colors*))
        "\nCode length : " *nb-positions*
        "\n\nHelp : \n"
@@ -88,7 +89,7 @@
 (defn wrong-input
   "When user delivers a wrongly written input"
   []
-  (print "Wrong Input.    "))
+  (print "Wrong Input.         "))
 
 (defn game-won
   "Winning the game hook"
