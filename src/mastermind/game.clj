@@ -129,7 +129,7 @@
   "Generate a list used by printable-score"
   [score]
   (let [score-list (concat (score-seq (score 0) :correct) (score-seq (score 1) :match))]
-    (concat score-list (score-seq (- 5 (count score-list)) :empty))))
+    (concat score-list (score-seq (- *nb-positions* (count score-list)) :empty))))
 
 (defn parse-proposition
   "Parse the proposition made by user"
