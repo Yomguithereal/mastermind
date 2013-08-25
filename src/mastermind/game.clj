@@ -28,6 +28,7 @@
 (declare end-of-game)
 
 (declare create-secret)
+(declare score-map)
 (declare parse-proposition)
 (declare check-proposition)
 
@@ -55,7 +56,7 @@
                score (check-guess guess secret)]
           (if (check-proposition guess)
               (do
-                (print (printable-guess guess) score)
+                (print (printable-guess guess) (printable-score score))
                 (flush)
                 (when (winning? score)
                       (game-won nb-tries)))
@@ -80,7 +81,11 @@
 (defn printable-score
   "Print the user's score with fancy colors"
   [score]
-  (str "[" (concat (map (fn [x] (:correct)) (range 0 (score 0))) (map (fn [x] (:matches)) (range 0 (score 1))))  "]"))
+  (let [score-list (score-map score)
+        str-substitutions {:correct (color "O" :black :bold)
+                           :match (color "O" :white :bold)
+                           :empty "-"}]
+    (apply str (map (fn [x] (str-substitutions x)) score-list))))
 
 (defn printable-help
   "Returns the help string"
@@ -115,6 +120,16 @@
   "Randomly generates the secret of the game"
   []
   (map (fn [x] (rand-nth *colors*)) (range 0 *nb-positions*)))
+
+(defn score-seq
+  [number marker]
+  (map (fn [x] marker) (range 0 number)))
+
+(defn score-map
+  "Generate a list used by printable-score"
+  [score]
+  (let [score-list (concat (score-seq (score 0) :correct) (score-seq (score 1) :match))]
+    (concat score-list (score-seq (- 5 (count score-list)) :empty))))
 
 (defn parse-proposition
   "Parse the proposition made by user"
