@@ -25,5 +25,5 @@
   "Get the score"
   [guess secret]
   (let [precise (check-precise guess secret)
-    blurry (check-blurry guess secret)]
+        blurry (check-blurry guess secret)]
     [precise (- blurry precise)]))
