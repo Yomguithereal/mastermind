@@ -11,7 +11,7 @@
   (:gen-class :main true))
 
 ;; Launching
-(defn -main 
+(defn -main
   []
-  (println "------------------\nHello Mastermind !\n------------------")
+  (println "\n------------------\nHello Mastermind !\n------------------")
   (launch-game))

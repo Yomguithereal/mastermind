@@ -21,6 +21,7 @@
 (declare exiting?)
 (declare winning?)
 (declare printable-guess)
+(declare printable-score)
 (declare printable-help)
 (declare wrong-input)
 (declare game-won)
@@ -75,6 +76,11 @@
   "Print the user's guess with fancy colors"
   [guess]
   (str "\n" (apply str (map #(str (background-color "  " (keyword %)) " ") guess))))
+
+(defn printable-score
+  "Print the user's score with fancy colors"
+  [score]
+  (str "[" (concat (map (fn [x] (:correct)) (range 0 (score 0))) (map (fn [x] (:matches)) (range 0 (score 1))))  "]"))
 
 (defn printable-help
   "Returns the help string"
